@@ -14,55 +14,46 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace WhileFrontPlayer
-{
+namespace WhileFrontPlayer {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
         private bool isPlay = false;
         private bool isEnd = false;
         private DispatcherTimer timer;
         private Duration Total;
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
+            //イベント割当
             Handle.MouseLeftButtonDown += (o, e) => DragMove();
-            this.Closing += delegate{ if (mediaElement.Source != null) mediaElement.Stop(); };
+            CloseButton.MouseLeftButtonDown += delegate {
+                if (MessageBox.Show("終了してよろしいですか？", "確認", MessageBoxButton.OKCancel) == MessageBoxResult.OK) this.Close();
+            };
+            this.Closing += delegate { if (mediaElement.Source != null) mediaElement.Stop(); };
+            this.MouseEnter += delegate { Controler.Visibility = Visibility.Visible; };
+            this.MouseLeave += delegate { Controler.Visibility = Visibility.Hidden; };
+            PlayButton.MouseLeftButtonUp += (o, e) => Menu_Pause(o, null);
+            PauseButton.MouseLeftButtonUp += (o, e) => Menu_Pause(o, null);
             //経過時間表示用
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 0, 600);
         }
 
-        private void Window_Drop(object sender, DragEventArgs e)
-        {
+        private void Window_Drop(object sender, DragEventArgs e) {
             string[] filenames = e.Data.GetData(DataFormats.FileDrop) as string[];
-            if(filenames != null && filenames.Length != 0)
-            {
-                mediaElement.Source = new Uri(filenames[0]);
-                FileName.Content = System.IO.Path.GetFileName(filenames[0]);
-                try { mediaElement.Play(); }
-                catch
-                {
-                    MessageBox.Show("このメディアは再生出来ません");
-                    return;
-                }
-                isPlay = true;
-            }
+            if (filenames != null && filenames.Length == 1) Media_Open(filenames[0]);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
+        private void Window_KeyDown(object sender, KeyEventArgs e) {
+            switch (e.Key) {
                 case Key.Escape:
                     if (MessageBox.Show("終了してよろしいですか？", "確認", MessageBoxButton.OKCancel) == MessageBoxResult.OK) this.Close();
                     break;
                 case Key.Space:
-                    if (mediaElement.Source != null) Menu_Pause(null,null);
+                    if (mediaElement.Source != null) Menu_Pause(null, null);
                     break;
                 case Key.Left:
                     if (mediaElement.Source != null) Player_Seek(-5000);
@@ -73,19 +64,15 @@ namespace WhileFrontPlayer
             }
         }
 
-        private void Menu_Pause(object sender, RoutedEventArgs e)
-        {
-            if (isPlay)
-            {
+        private void Menu_Pause(object sender, RoutedEventArgs e) {
+            if (isPlay) {
                 mediaElement.Pause();
                 PauseButton.Visibility = Visibility.Hidden;
                 PlayButton.Visibility = Visibility.Visible;
                 timer.Stop();
                 isPlay = false;
-            }else
-            {
-                if (isEnd)
-                {
+            } else {
+                if (isEnd) {
                     mediaElement.Stop();
                     isEnd = false;
                 }
@@ -98,41 +85,24 @@ namespace WhileFrontPlayer
             }
         }
 
-        private void Player_Seek(int ms)
-        {
+        private void Player_Seek(int ms) {
             bool back = false;
             if (ms < 0) back = true;
             TimeSpan ts = new TimeSpan(0, 0, 0, 0, Math.Abs(ms));
             if (back) mediaElement.Position -= ts;
             else mediaElement.Position += ts;
+            timer_Tick(null, null);
         }
 
-        private void Window_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Controler.Visibility = Visibility.Visible;
-        }
-
-        private void Window_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Controler.Visibility = Visibility.Hidden;
-        }
-
-        private void Control_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Menu_Pause(null, null);
-        }
-
-        private void mediaElement_MediaEnded(object sender, RoutedEventArgs e)
-        {
+        private void mediaElement_MediaEnded(object sender, RoutedEventArgs e) {
             PauseButton.Visibility = Visibility.Hidden;
             PlayButton.Visibility = Visibility.Visible;
             isPlay = false;
             isEnd = true;
         }
 
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            
+        private void timer_Tick(object sender, EventArgs e) {
+
             string temp = String.Format("{0:D2}:{1:D2}:{2:D2}", mediaElement.Position.Hours
                                                               , mediaElement.Position.Minutes
                                                               , mediaElement.Position.Seconds);
@@ -142,36 +112,29 @@ namespace WhileFrontPlayer
             Time.Content = temp;
         }
 
-        private void mediaElement_MediaOpened(object sender, RoutedEventArgs e)
-        {
+        private void mediaElement_MediaOpened(object sender, RoutedEventArgs e) {
             Total = mediaElement.NaturalDuration;
             PauseButton.Visibility = Visibility.Visible;
             timer.Start();
         }
 
-        private void FileName_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
+        private void FileName_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.Title = "ファイルを開く";
             dialog.Filter = "動画ファイル|*.mp4;*.wmv";
-            if (dialog.ShowDialog() == true)
-            {
-                mediaElement.Source = new Uri(dialog.FileName);
-                FileName.Content = System.IO.Path.GetFileName(dialog.FileName);
-                try { mediaElement.Play(); }
-                catch
-                {
-                    MessageBox.Show("このメディアは再生出来ません");
-                    return;
-                }
-                isPlay = true;
-            }
+            if (dialog.ShowDialog() == true) Media_Open(dialog.FileName);
 
         }
 
-        private void CloseButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
+        private void Media_Open(string FilePath) {
+            mediaElement.Source = new Uri(FilePath);
+            FileName.Content = System.IO.Path.GetFileName(FilePath);
+            try { mediaElement.Play(); }
+            catch {
+                MessageBox.Show("このメディアは再生出来ません");
+                return;
+            }
+            isPlay = true;
         }
     }
 }
