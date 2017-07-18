@@ -132,9 +132,13 @@ namespace WhileFrontPlayer
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            
             string temp = String.Format("{0:D2}:{1:D2}:{2:D2}", mediaElement.Position.Hours
                                                               , mediaElement.Position.Minutes
                                                               , mediaElement.Position.Seconds);
+            temp += String.Format("/{0:D2}:{1:D2}:{2:D2}", Total.TimeSpan.Hours
+                                                         , Total.TimeSpan.Minutes
+                                                         , Total.TimeSpan.Seconds);
             Time.Content = temp;
         }
 
