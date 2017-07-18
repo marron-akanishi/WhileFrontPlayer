@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MyToolkit.Multimedia;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,7 +34,6 @@ namespace WhileFrontPlayer {
             CloseButton.MouseLeftButtonDown += delegate {
                 if (MessageBox.Show("終了してよろしいですか？", "確認", MessageBoxButton.OKCancel) == MessageBoxResult.OK) this.Close();
             };
-            this.Closing += delegate { if (mediaElement.Source != null) mediaElement.Stop(); };
             this.MouseEnter += delegate { Controler.Visibility = Visibility.Visible; };
             this.MouseLeave += delegate { Controler.Visibility = Visibility.Hidden; };
             PlayButton.MouseLeftButtonUp += (o, e) => Menu_Pause(o, null);
@@ -118,14 +120,6 @@ namespace WhileFrontPlayer {
             timer.Start();
         }
 
-        private void FileName_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Title = "ファイルを開く";
-            dialog.Filter = "動画ファイル|*.mp4;*.wmv";
-            if (dialog.ShowDialog() == true) Media_Open(dialog.FileName);
-
-        }
-
         private void Media_Open(string FilePath) {
             mediaElement.Source = new Uri(FilePath);
             FileName.Content = System.IO.Path.GetFileName(FilePath);
@@ -136,5 +130,24 @@ namespace WhileFrontPlayer {
             }
             isPlay = true;
         }
+
+        private void FileName_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Title = "ファイルを開く";
+            dialog.Filter = "動画ファイル|*.mp4;*.wmv";
+            if (dialog.ShowDialog() == true) Media_Open(dialog.FileName);
+        }
+
+        //private async void button_Click(object sender, RoutedEventArgs e) {
+        //    try {
+        //        var url = await YouTube.GetVideoUriAsync(textBox.Text, YouTubeQuality.Quality480P);
+        //        mediaElement.Source = url.Uri;
+        //        mediaElement.Play();
+        //        isPlay = true;
+        //    }
+        //    catch {
+        //        MessageBox.Show("無理");
+        //    }
+        //}
     }
 }
