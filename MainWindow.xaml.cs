@@ -1,5 +1,4 @@
-﻿using MyToolkit.Multimedia;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -137,17 +136,5 @@ namespace WhileFrontPlayer {
             dialog.Filter = "動画ファイル|*.mp4;*.wmv";
             if (dialog.ShowDialog() == true) Media_Open(dialog.FileName);
         }
-
-        //private async void button_Click(object sender, RoutedEventArgs e) {
-        //    try {
-        //        var url = await YouTube.GetVideoUriAsync(textBox.Text, YouTubeQuality.Quality480P);
-        //        mediaElement.Source = url.Uri;
-        //        mediaElement.Play();
-        //        isPlay = true;
-        //    }
-        //    catch {
-        //        MessageBox.Show("無理");
-        //    }
-        //}
     }
 }

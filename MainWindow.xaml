@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WhileFrontPlayer"
         mc:Ignorable="d"
         Title="WFP" Height="270" Width="480" MinHeight="270" MinWidth="480" AllowsTransparency="True" WindowStyle="None" 
-        ResizeMode="CanResizeWithGrip" Background="#FF515151" Drop="Window_Drop" KeyDown="Window_KeyDown" AllowDrop="True" Topmost="True" WindowStartupLocation="CenterScreen">
+        ResizeMode="CanResizeWithGrip" Background="#FF515151" Drop="Window_Drop" KeyDown="Window_KeyDown" AllowDrop="True" Topmost="True" WindowStartupLocation="CenterScreen" Icon="wfp.ico">
     <Grid>
         <Rectangle x:Name="Handle" Fill="#00AAAAAA" KeyDown="Window_KeyDown" Grid.ZIndex="1" Cursor="SizeAll" />
         <MediaElement x:Name="mediaElement" Canvas.Top="0" Canvas.Left="0" Volume="1" LoadedBehavior="Manual" MediaEnded="mediaElement_MediaEnded" MediaOpened="mediaElement_MediaOpened" />
