@@ -120,7 +120,7 @@ namespace WhileFrontPlayer {
         }
 
         private void Media_Open(string FilePath) {
-            mediaElement.Source = new Uri(FilePath);
+            mediaElement.Source = new Uri(FilePath,true); //警告が出るけど、こうしないと再生出来ないファイルがある
             FileName.Content = System.IO.Path.GetFileName(FilePath);
             try { mediaElement.Play(); }
             catch {
