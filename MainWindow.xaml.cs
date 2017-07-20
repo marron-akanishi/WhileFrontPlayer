@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using YoutubeExtractor;
 
 namespace WhileFrontPlayer {
     /// <summary>
@@ -136,7 +137,8 @@ namespace WhileFrontPlayer {
 
         private void Media_Open(string FilePath) {
             mediaElement.Source = new Uri(FilePath,true); //警告が出るけど、こうしないと再生出来ないファイルがある
-            FileName.Content = System.IO.Path.GetFileName(FilePath);
+            if (!FilePath.StartsWith("http")) FileName.Content = System.IO.Path.GetFileName(FilePath);
+            else FileName.Content = "Web";
             try {
                 mediaElement.Play();
                 isPlay = true;
@@ -158,6 +160,18 @@ namespace WhileFrontPlayer {
                 Point pos = e.GetPosition(this);
                 double seekpos = totalms * (pos.X / this.Width) - mediaElement.Position.TotalMilliseconds;
                 Player_Seek((int)seekpos);
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e) {
+            string link = "https://www.youtube.com/watch?v=i9LyXB60Wdk";
+            IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(link);
+
+            VideoInfo video = videoInfos
+                .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 720);
+
+            if (video.RequiresDecryption) {
+                DownloadUrlResolver.DecryptDownloadUrl(video);
             }
         }
     }
