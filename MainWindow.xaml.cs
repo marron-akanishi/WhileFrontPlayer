@@ -61,7 +61,7 @@ namespace WhileFrontPlayer {
             if (filenames != null && filenames.Length == 1) Media_Open(filenames[0]);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e) {
+        private void Window_KeyUp(object sender, KeyEventArgs e) {
             switch (e.Key) {
                 case Key.Escape:
                     if (MessageBox.Show("終了してよろしいですか？", "確認", MessageBoxButton.OKCancel) == MessageBoxResult.OK) this.Close();
