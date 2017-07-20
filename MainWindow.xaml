@@ -5,33 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhileFrontPlayer"
         mc:Ignorable="d"
-        Title="WFP" Height="270" Width="480" MinHeight="270" MinWidth="480" AllowsTransparency="True" WindowStyle="None" 
-        ResizeMode="CanResizeWithGrip" Background="#FF515151" Drop="Window_Drop" KeyDown="Window_KeyDown" AllowDrop="True" Topmost="True" WindowStartupLocation="CenterScreen" Icon="wfp.ico">
+        Title="WFP" Height="270" Width="480" MinHeight="270" MinWidth="480" WindowStyle="None" Background="#FF515151" Drop="Window_Drop" KeyDown="Window_KeyDown" AllowDrop="True" Topmost="True" WindowStartupLocation="CenterScreen" Icon="wfp.ico" AllowsTransparency="True" ResizeMode="CanResizeWithGrip">
     <Grid>
         <Rectangle x:Name="Handle" Fill="#00AAAAAA" KeyDown="Window_KeyDown" Grid.ZIndex="1" Cursor="SizeAll" />
         <MediaElement x:Name="mediaElement" Canvas.Top="0" Canvas.Left="0" Volume="1" LoadedBehavior="Manual" MediaEnded="mediaElement_MediaEnded" MediaOpened="mediaElement_MediaOpened" />
         <Grid x:Name="Controler" Grid.ZIndex="2" Visibility="Hidden">
             <Label x:Name="FileName" Content="Open..." Background="#DDA1A1A1" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="FileName_MouseDoubleClick"/>
-            <Label x:Name="Time" Content="00:00:00" Background="#DDA1A1A1" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
-            <Canvas x:Name="PlayButton" Height="100" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Opacity="0.9">
-                <Ellipse xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="100" Height="100" Fill="#FF393939" StrokeThickness="1.76550436" StrokeMiterLimit="4"/>
-                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path12" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Data="m -356.00302 59.664659 -7.15841 4.266546 -7.15842 4.266546 -0.11573 -8.33264 -0.11573 -8.332639 7.27415 4.066094 z" Canvas.Left="102.666" Canvas.Top="25.333" Stretch="Fill" Width="49.687" Height="54.306">
-                    <Path.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleX="1.028"/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="1"/>
-                            <TranslateTransform X="-73.310516" Y="-1.6036172"/>
-                        </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
+            <Label x:Name="NowTime" Content="00:00:00" Background="#DDA1A1A1" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,10" />
+            <Label x:Name="TotalTime" Content="00:00:00" Background="#DDA1A1A1" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10" />
+            <Rectangle x:Name="SeekBarBG" VerticalAlignment="Bottom" Height="10" Fill="#DDA1A1A1" Panel.ZIndex="2"  />
+            <Rectangle x:Name="SeekBar" VerticalAlignment="Bottom" Height="10" Fill="#FFFF0097" Panel.ZIndex="3" Width="0" HorizontalAlignment="Left" />
+            <Rectangle x:Name="SeekArea" VerticalAlignment="Bottom" Height="10" Fill="#00FFFFFF" Panel.ZIndex="4" MouseLeftButtonUp="SeekArea_MouseLeftButtonUp"  />
+            <Canvas x:Name="PlayButton" Height="70" Width="70" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9" Visibility="Hidden">
+                <Ellipse xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="70" Height="70" Fill="#FF393939" StrokeThickness="1.76550436" StrokeMiterLimit="4"/>
+                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path12" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Data="m -356.00302 59.664659 -7.15841 4.266546 -7.15842 4.266546 -0.11573 -8.33264 -0.11573 -8.332639 7.27415 4.066094 z" Canvas.Left="18.771" Canvas.Top="16.012" Stretch="Fill" Width="39.602" Height="38.976"/>
             </Canvas>
-            <Canvas x:Name="PauseButton" Height="100" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Opacity="0.9">
-                <Ellipse xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="100" Height="100" Name="path108" Fill="#FF393939" StrokeThickness="1.76550436" StrokeMiterLimit="4"/>
-                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="11" Height="47" Name="rect32" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Canvas.Left="58" Canvas.Top="26"/>
-                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="11" Height="47" Name="rect323" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Canvas.Left="31" Canvas.Top="26"/>
+            <Canvas x:Name="PauseButton" Height="70" Width="70" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9" Visibility="Hidden">
+                <Ellipse xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="70" Height="70" Name="path108" Fill="#FF393939" StrokeThickness="1.76550436" StrokeMiterLimit="4"/>
+                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="10" Height="41" Name="rect32" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Canvas.Left="43" Canvas.Top="15"/>
+                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="10" Height="41" Name="rect323" Fill="#FFFFFFFF" StrokeThickness="10" StrokeMiterLimit="4" Canvas.Left="18" Canvas.Top="15"/>
             </Canvas>
-            <Canvas x:Name="CloseButton" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Canvas x:Name="CloseButton" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="10">
                 <Rectangle Width="30" Height="30" Fill="#AAFF0000" VerticalAlignment="Top" HorizontalAlignment="Right" Canvas.Right="0"/>
                 <Rectangle Width="3" Height="13" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Right="14" Fill="White" RenderTransformOrigin="0.5,0.5" Canvas.Top="8" >
                     <Rectangle.RenderTransform>
@@ -54,6 +48,9 @@
                     </Rectangle.RenderTransform>
                 </Rectangle>
             </Canvas>
+        </Grid>
+        <Grid x:Name="Preview" Grid.ZIndex="2" Visibility="Hidden">
+            <Rectangle x:Name="SeekPreview" Height="2" Fill="#FFFF0097" VerticalAlignment="Bottom" Width="0" HorizontalAlignment="Left"/>
         </Grid>
     </Grid>
 </Window>
