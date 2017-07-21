@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +17,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using YoutubeExtractor;
 
 namespace WhileFrontPlayer {
     /// <summary>
@@ -31,9 +31,7 @@ namespace WhileFrontPlayer {
         public MainWindow() {
             InitializeComponent();
             //ウィンドウサイズ初期化
-            //ウィンドウがあるモニターの画面サイズを取得するためにFormのAPIを呼び出してる
-            WindowInteropHelper wih = new WindowInteropHelper(App.Current.MainWindow);
-            int w = System.Windows.Forms.Screen.FromHandle(wih.Handle).Bounds.Width;
+            int w = (int)SystemParameters.WorkArea.Width;
             this.Width = this.MinWidth = w / 4;
             this.Height = this.MinHeight = this.Width / 16 * 9;
             //イベント割当
@@ -160,18 +158,6 @@ namespace WhileFrontPlayer {
                 Point pos = e.GetPosition(this);
                 double seekpos = totalms * (pos.X / this.Width) - mediaElement.Position.TotalMilliseconds;
                 Player_Seek((int)seekpos);
-            }
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e) {
-            string link = "https://www.youtube.com/watch?v=i9LyXB60Wdk";
-            IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(link);
-
-            VideoInfo video = videoInfos
-                .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 720);
-
-            if (video.RequiresDecryption) {
-                DownloadUrlResolver.DecryptDownloadUrl(video);
             }
         }
     }

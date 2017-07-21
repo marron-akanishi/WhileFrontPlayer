@@ -48,7 +48,6 @@
                     </Rectangle.RenderTransform>
                 </Rectangle>
             </Canvas>
-            <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         </Grid>
         <Grid x:Name="Preview" Grid.ZIndex="2" Visibility="Hidden">
             <Rectangle x:Name="SeekPreview" Height="2" Fill="#FFFF0097" VerticalAlignment="Bottom" Width="0" HorizontalAlignment="Left"/>
