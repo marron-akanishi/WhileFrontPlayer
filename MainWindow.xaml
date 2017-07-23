@@ -8,8 +8,8 @@
         Title="WFP" Height="270" Width="480" MinHeight="270" MinWidth="480" WindowStyle="None" Background="#FF515151" Drop="Window_Drop" KeyUp="Window_KeyUp" AllowDrop="True" Topmost="True" WindowStartupLocation="CenterScreen" Icon="wfp.ico" AllowsTransparency="True" ResizeMode="CanResizeWithGrip">
     <Grid>
         <Rectangle x:Name="Handle" Fill="#00AAAAAA" KeyUp="Window_KeyUp" Grid.ZIndex="1" Cursor="SizeAll" />
-        <MediaElement x:Name="mediaElement" Canvas.Top="0" Canvas.Left="0" Volume="1" LoadedBehavior="Manual" MediaEnded="mediaElement_MediaEnded" MediaOpened="mediaElement_MediaOpened" />
-        <Grid x:Name="Controler" Grid.ZIndex="2">
+        <MediaElement x:Name="mediaElement" Canvas.Top="0" Canvas.Left="0" Volume="1" LoadedBehavior="Manual" MediaOpened="mediaElement_MediaOpened" />
+        <Grid x:Name="Controler" Grid.ZIndex="2" Visibility="Hidden">
             <Label x:Name="FileName" Content="Open..." Background="#DDA1A1A1" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="FileName_MouseDoubleClick"/>
             <Label x:Name="NowTime" Content="00:00:00" Background="#DDA1A1A1" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,10" />
             <Label x:Name="TotalTime" Content="00:00:00" Background="#DDA1A1A1" FontSize="14" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10" />

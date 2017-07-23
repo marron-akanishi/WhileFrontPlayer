@@ -82,7 +82,6 @@ namespace WhileFrontPlayer {
                 mediaElement.Pause();
                 PauseButton.Visibility = Visibility.Hidden;
                 PlayButton.Visibility = Visibility.Visible;
-                timer.Stop();
                 isPlay = false;
             } else {
                 if (isEnd) {
@@ -93,7 +92,6 @@ namespace WhileFrontPlayer {
                 catch { return; }
                 PlayButton.Visibility = Visibility.Hidden;
                 PauseButton.Visibility = Visibility.Visible;
-                timer.Start();
                 isPlay = true;
             }
         }
@@ -107,13 +105,6 @@ namespace WhileFrontPlayer {
             timer_Tick(null, null);
         }
 
-        private void mediaElement_MediaEnded(object sender, RoutedEventArgs e) {
-            PauseButton.Visibility = Visibility.Hidden;
-            PlayButton.Visibility = Visibility.Visible;
-            isPlay = false;
-            isEnd = true;
-        }
-
         private void timer_Tick(object sender, EventArgs e) {
             //時間表示
             NowTime.Content = String.Format("{0:D2}:{1:D2}:{2:D2}", mediaElement.Position.Hours
@@ -121,6 +112,13 @@ namespace WhileFrontPlayer {
                                                                   , mediaElement.Position.Seconds);
             //シークバー移動
             SeekBar.Width = SeekPreview.Width = this.Width * (mediaElement.Position.TotalMilliseconds / totalms);
+            if(mediaElement.Position.TotalMilliseconds == totalms) {
+                timer.Stop();
+                PauseButton.Visibility = Visibility.Hidden;
+                PlayButton.Visibility = Visibility.Visible;
+                isPlay = false;
+                isEnd = true;
+            }
         }
 
         private void mediaElement_MediaOpened(object sender, RoutedEventArgs e) {
