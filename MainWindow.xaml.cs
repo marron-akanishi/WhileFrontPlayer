@@ -36,9 +36,10 @@ namespace WhileFrontPlayer {
             this.Height = this.MinHeight = this.Width / 16 * 9;
             //イベント割当
             Handle.MouseLeftButtonDown += (o, e) => DragMove();
-            CloseButton.MouseLeftButtonDown += delegate {
+            CloseButton.MouseLeftButtonUp += delegate {
                 if (MessageBox.Show("終了してよろしいですか？", "確認", MessageBoxButton.OKCancel) == MessageBoxResult.OK) this.Close();
             };
+            CloseButton.MouseRightButtonUp += delegate { this.WindowState = WindowState.Minimized; };
             this.MouseEnter += delegate {
                 Preview.Visibility = Visibility.Hidden;
                 Controler.Visibility = Visibility.Visible;
@@ -86,6 +87,7 @@ namespace WhileFrontPlayer {
             } else {
                 if (isEnd) {
                     mediaElement.Stop();
+                    timer.Start();
                     isEnd = false;
                 }
                 try { mediaElement.Play(); }
