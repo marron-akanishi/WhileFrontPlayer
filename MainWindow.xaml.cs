@@ -27,13 +27,16 @@ namespace WhileFrontPlayer {
         private bool isEnd = false;
         private DispatcherTimer timer;
         private double totalms;
+        private Point[] WindowSize = new Point[2];
 
         public MainWindow() {
             InitializeComponent();
             //ウィンドウサイズ初期化
             int w = (int)SystemParameters.WorkArea.Width;
-            this.Width = this.MinWidth = w / 4;
-            this.Height = this.MinHeight = this.Width / 16 * 9;
+            this.Width = this.MinWidth = WindowSize[0].X = w / 4;
+            this.Height = this.MinHeight = WindowSize[0].Y = this.Width / 16 * 9;
+            WindowSize[1].X = WindowSize[0].X * 2;
+            WindowSize[1].Y = WindowSize[0].Y * 2;
             //イベント割当
             Handle.MouseLeftButtonDown += (o, e) => DragMove();
             CloseButton.MouseLeftButtonUp += delegate {
@@ -74,6 +77,14 @@ namespace WhileFrontPlayer {
                     break;
                 case Key.Right:
                     if (mediaElement.Source != null) Player_Seek(5000);
+                    break;
+                case Key.D1:
+                    this.Width = WindowSize[0].X;
+                    this.Height = WindowSize[0].Y;
+                    break;
+                case Key.D2:
+                    this.Width = WindowSize[1].X;
+                    this.Height = WindowSize[1].Y;
                     break;
             }
         }
